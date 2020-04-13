@@ -7,7 +7,7 @@ license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/ankcorp/kalam"
 repository = "https://github.com/ankcorp/kalam"
-documentation = "https://kalam.readthedocs.io"
+documentation = "https://kalam-ankcorp.readthedocs.io"
 keywords = ["kalam", "static", "site", "generator"]
 
 [tool.poetry.dependencies]
