@@ -33,12 +33,13 @@ class Reader(File):
         abs_path_of_file = get_abs_path(__file__, path)
         try:
             with open(abs_path_of_file) as f:
-                file_info = dict()
-                file_info["file_name"] = get_path_basename(abs_path_of_file)
-                file_info["type"] = get_file_type(abs_path_of_file)
-                file_info["path"] = abs_path_of_file
-                file_info["metadata"] = get_file_metadata(abs_path_of_file)
-                file_info["raw"] = f.read()
+                file_info = {
+                    "path": abs_path_of_file,
+                    "file_name": get_path_basename(abs_path_of_file),
+                    "type": get_file_type(abs_path_of_file),
+                    "metadata": get_file_metadata(abs_path_of_file),
+                    "raw": f.read(),
+                }
                 self.set_file_info(file_info)
                 f.close()
 
