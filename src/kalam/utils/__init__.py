@@ -1,1 +1,1 @@
-"""Kalam's utility module."""
+"""Kalam utility module."""
