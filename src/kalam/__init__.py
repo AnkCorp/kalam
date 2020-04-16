@@ -10,4 +10,4 @@ try:
 except PackageNotFoundError:  # pragma: no cover
     __version__ = "unknown"
 
-from . import io
+from . import io  # noqa
