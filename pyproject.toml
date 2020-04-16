@@ -40,6 +40,7 @@ xdoctest = "^0.11.0"
 sphinx = "^2.3.1"
 sphinx-autodoc-typehints = "^1.10.3"
 codecov = "^2.0.15"
+pre-commit = "^2.2.0"
 
 [tool.poetry.scripts]
 kalam = "kalam.cli.console:main"
