@@ -7,3 +7,4 @@
 /src/*.egg-info/
 __pycache__/
 .vscode
+dist
