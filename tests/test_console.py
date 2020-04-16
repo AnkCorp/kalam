@@ -2,7 +2,7 @@
 from click.testing import CliRunner
 import pytest
 
-from kalam import console
+from kalam.cli import console
 
 
 @pytest.fixture
