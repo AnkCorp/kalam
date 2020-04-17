@@ -1,22 +1,16 @@
 """All the constants related to file type."""
 
-PDF = "PDF"
-TEX = "TEX"
-TOML = "TOML"
-MD = "MARKDOWN"
-RST = "RESTRUCTURED_TEXT_FILE"
+UNKNOWN = "UNKNOWN_FILE_TYPE"
 
-# Web
-HTML = "HTML"
-CSS = "CSS"
-SCSS = "SCSS"
-SASS = "SASS"
-JS = "JS"
-JSX = "JSX"
-
-# Languages
-PY = "PYTHON"
-C = "C"
-CPP = "C++"
-
-UNKNOWN = "UNKNOWN"
+file_types = {
+    ".html": "HTML",
+    ".htm": "HTML",
+    ".pdf": "PDF",
+    ".md": "MARKDOWN",
+    ".rst": "RESTRUCTURED_TEXT_FILE",
+    ".tex": "TEX",
+    ".js": "JAVASCRIPT",
+    ".py": "PYTHON",
+    ".jsx": "JAVASCRIPT_EXTENDED",
+    ".toml": "TOML",
+}
