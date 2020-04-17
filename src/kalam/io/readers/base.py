@@ -1,54 +1,52 @@
 """Base module for reader and file."""
 
-from kalam.utils.file_tool import (
-    # generate_path,
+from kalam.io.files.base import File
+from kalam.utils.path import (
+    generate_path,
     get_abs_path,
-    get_file_metadata,
-    get_file_type,
-    get_path_basename,
+    get_path_accessed_time,
+    get_path_created_time,
+    get_path_modified_time,
+    path_exist,
 )
 
 
-class File:
-    """File class."""
-
-    def __init__(self: "File") -> None:
-        """Initialize the file object."""
-        self.file = dict()
-
-    def set_file_info(self: "File", info: dict) -> None:
-        """Set file info."""
-        self.file = info
-
-    def get_file_info(self: "File") -> "File":
-        """Return the file info."""
-        return self.file
-
-
-class Reader(File):
+class Reader:
     """Reader class."""
+
+    def __init__(self: "Reader") -> None:
+        """Initialize reader instance."""
+        self.reader = dict()
+        self.file = File()
 
     def open(self: "Reader", path: str) -> None:
         """Open file."""
-        abs_path_of_file = get_abs_path(__file__, path)
+        abs_path = get_abs_path(__file__, path)
         try:
-            with open(abs_path_of_file) as f:
-                file_info = {
-                    "path": abs_path_of_file,
-                    "file_name": get_path_basename(abs_path_of_file),
-                    "type": get_file_type(abs_path_of_file),
-                    "metadata": get_file_metadata(abs_path_of_file),
-                    "raw": f.read(),
-                }
-                self.set_file_info(file_info)
-                f.close()
+            if path_exist(abs_path):
+                with open(abs_path) as file_data:
+                    self.file.set_file_info(
+                        {
+                            "path": abs_path,
+                            "raw": file_data.read(),
+                            "metadata": {
+                                "created_at": get_path_created_time(abs_path),
+                                "accessed_at": get_path_accessed_time(path),
+                                "modified_at": get_path_modified_time(path),
+                            },
+                        }
+                    )
+
+            else:
+                raise IOError
 
         except IOError:
-            print("Could not read file at: {}".format(abs_path_of_file))
+            print("Could not read file at: {}".format(abs_path))
 
 
-# path = generate_path(["..", "..", "__init__.py"])
+path = generate_path(["..", "..", "__init__.py"])
 
-# r = Reader()
-# r.open(path)
-# print(r.get_file_info())
+r = Reader()
+r.open(path)
+
+print(r.file.file)
