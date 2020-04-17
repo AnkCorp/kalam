@@ -21,7 +21,7 @@ class Reader:
 
     def open(self: "Reader", path: str) -> None:
         """Open file."""
-        abs_path = get_abs_path(path)
+        abs_path = get_abs_path(__file__, path)
         try:
             if path_exist(abs_path):
                 with open(abs_path) as file_data:
