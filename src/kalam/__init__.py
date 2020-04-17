@@ -10,4 +10,6 @@ try:
 except PackageNotFoundError:  # pragma: no cover
     __version__ = "unknown"
 
-from . import io  # noqa
+from kalam import io  # noqa
+from kalam import jobs  # noqa
+from kalam import pipeline  # noqa
