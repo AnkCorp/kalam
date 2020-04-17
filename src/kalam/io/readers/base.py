@@ -21,7 +21,7 @@ class Reader:
 
     def open(self: "Reader", path: str) -> None:
         """Open file."""
-        abs_path = get_abs_path(__file__, path)
+        abs_path = get_abs_path(path)
         try:
             if path_exist(abs_path):
                 with open(abs_path) as file_data:
@@ -31,17 +31,19 @@ class Reader:
                             "raw": file_data.read(),
                             "metadata": {
                                 "created_at": get_path_created_time(abs_path),
-                                "accessed_at": get_path_accessed_time(path),
-                                "modified_at": get_path_modified_time(path),
+                                "accessed_at": get_path_accessed_time(abs_path),
+                                "modified_at": get_path_modified_time(abs_path),
                             },
                         }
                     )
-
             else:
-                raise IOError
+                raise OSError
+
+        except OSError:
+            print("[Reader Error] Path doesn't exist. path: {}".format(abs_path))
 
         except IOError:
-            print("Could not read file at: {}".format(abs_path))
+            print("[Reader Error] Could not read file at: {}".format(abs_path))
 
 
 path = generate_path(["..", "..", "__init__.py"])

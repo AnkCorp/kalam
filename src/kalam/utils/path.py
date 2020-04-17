@@ -3,20 +3,21 @@
 import os
 
 
-def get_abs_path(filename: str, relative_path_of_target: str) -> str:
+def get_abs_path(relative_path_of_target: str) -> str:
     """Return the abs path of the target file.
 
     Require the calling function filename, and path of target file relative to
     the file containing calling function.
 
     Args:
-        filename: file name of the calling function. usually __file__.
         relative_path_of_target: relative path of the target file.
 
     Returns:
         absolute path of the target file.
     """
-    dirname = os.path.dirname(os.path.realpath(filename))
+    import inspect
+
+    dirname = os.path.dirname(os.path.realpath(inspect.stack()[1][1]))
     path = os.path.realpath(os.path.join(dirname, relative_path_of_target))
     return path
 
@@ -33,7 +34,7 @@ def generate_path(path_array: list) -> str:
     Returns:
         path generated on the basis of path_array
     """
-    return os.path.realpath(os.path.join(*path_array))
+    return os.path.join(*path_array)
 
 
 def get_path_basename(path: str) -> str:
@@ -106,3 +107,27 @@ def get_path_created_time(path: str) -> float:
         Returns the created time as floating point. It returns time from epoch
     """
     return os.path.getctime(path)
+
+
+def mkdir(path: str) -> None:
+    """Create the path.
+
+    It first check whether path already exist or not, then creates
+
+    Args:
+        path: path to create.
+    """
+    if not path_exist(path):
+        os.path.mkdir(path)
+
+
+def mkdir_current(filename: str) -> None:
+    """Create the path.
+
+    Create directory with respect to current directory
+
+    Args:
+        filename: name of the file.
+    """
+    path = generate_path([os.getcwd(), filename])
+    mkdir(path)
