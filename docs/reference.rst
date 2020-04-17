@@ -9,5 +9,5 @@ Reference
 kalam.console
 --------------------------
 
-.. automodule:: kalam.console
+.. automodule:: kalam.cli.console
    :members:
