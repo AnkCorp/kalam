@@ -2,11 +2,15 @@
 
 import click
 
+from kalam.cli.build import build
 from .. import __version__
 
 
-@click.command()
+@click.group()
 @click.version_option(version=__version__)
 def main() -> None:
     """Kalam console."""
-    click.secho("Hello World!", fg="green")
+    pass
+
+
+main.add_command(build)
