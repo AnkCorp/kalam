@@ -1,4 +1,4 @@
-The Hypermodern Python Project
+Kalam
 ==============================
 
 .. toctree::
