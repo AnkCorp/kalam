@@ -2,8 +2,6 @@
 
 import os
 
-from kalam.constants import file_type
-
 
 def get_abs_path(filename: str, relative_path_of_target: str) -> str:
     """Return the abs path of the target file.
@@ -50,43 +48,61 @@ def get_path_basename(path: str) -> str:
     return os.path.basename(path)
 
 
-def get_file_type(path: str) -> str:
-    """Extract the file type from file path.
+def get_file_extension_from_path(path: str) -> str:
+    """Extract the file extension from the path.
 
     Args:
         path: path of the target file.
 
     Returns:
-        Return the file type.
+        Return the file extension.
     """
-    ext = str.lower(os.path.splitext(path)[-1])
-    return {
-        ".html": file_type.HTML,
-        ".htm": file_type.HTML,
-        ".pdf": file_type.PDF,
-        ".md": file_type.MD,
-        ".rst": file_type.RST,
-        ".tex": file_type.TEX,
-        ".js": file_type.JS,
-        ".py": file_type.PY,
-        ".jsx": file_type.JSX,
-        ".toml": file_type.TOML,
-    }.get(ext, file_type.UNKNOWN)
+    return str.lower(os.path.splitext(path)[-1])
 
 
-def get_file_metadata(path: str) -> dict:
-    """Generate file metadata using file path.
+def path_exist(path: str) -> bool:
+    """Check if path exist or not.
 
     Args:
-        path: path of the target file.
+        path: path whose existence need to check
 
     Returns:
-        Return the file metadata.
+        Return whether path exist or not
     """
-    func = os.path
-    metadata = {
-        "created_at": func.getctime(path),
-        "accessed_at": func.getatime(path),
-        "modified_at": func.getmtime(path),
-    }
-    return metadata
+    return os.path.exists(path)
+
+
+def get_path_accessed_time(path: str) -> float:
+    """Returns the last time when path is accessed.
+
+    Args:
+        path: target path
+
+    Returns:
+        Returns the accessed time as floating point. It returns time from epoch
+    """
+    return os.path.getatime(path)
+
+
+def get_path_modified_time(path: str) -> float:
+    """Returns the last time when path is modified.
+
+    Args:
+        path: target path
+
+    Returns:
+        Returns the modified time as floating point. It returns time from epoch
+    """
+    return os.path.getmtime(path)
+
+
+def get_path_created_time(path: str) -> float:
+    """Returns the path created time.
+
+    Args:
+        path: target path
+
+    Returns:
+        Returns the created time as floating point. It returns time from epoch
+    """
+    return os.path.getctime(path)
