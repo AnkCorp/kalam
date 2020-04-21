@@ -146,3 +146,8 @@ def create_file_current(path: str, write: str) -> None:
     p = generate_path([os.getcwd(), path])
     with open(p, "w") as f:
         f.write(write)
+
+
+def pwd() -> str:
+    """Return the present working directory."""
+    return os.getcwd()
