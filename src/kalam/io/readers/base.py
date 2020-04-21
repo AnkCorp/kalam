@@ -3,7 +3,7 @@
 from kalam.io.files.base import File
 from kalam.utils.path import (
     generate_path,
-    get_abs_path,
+    generate_abs_path,
     get_path_accessed_time,
     get_path_created_time,
     get_path_modified_time,
@@ -21,7 +21,7 @@ class Reader:
 
     def open(self: "Reader", path: str) -> None:
         """Open file."""
-        abs_path = get_abs_path(__file__, path)
+        abs_path = generate_abs_path(__file__, path)
         try:
             if path_exist(abs_path):
                 with open(abs_path) as file_data:
@@ -44,11 +44,3 @@ class Reader:
 
         except IOError:
             print("[Reader Error] Could not read file at: {}".format(abs_path))
-
-
-path = generate_path(["..", "..", "__init__.py"])
-
-r = Reader()
-r.open(path)
-
-print(r.file.file)
