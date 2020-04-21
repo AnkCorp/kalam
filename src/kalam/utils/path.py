@@ -10,6 +10,7 @@ def get_abs_path(filename: str, relative_path_of_target: str) -> str:
     the file containing calling function.
 
     Args:
+        filename: filename of the calling function.
         relative_path_of_target: relative path of the target file.
 
     Returns:
@@ -119,13 +120,29 @@ def mkdir(path: str) -> None:
         os.path.mkdir(path)
 
 
-def mkdir_current(filename: str) -> None:
+def mkdir_current(path: str) -> None:
     """Create the path.
 
     Create directory with respect to current directory
 
     Args:
-        filename: name of the file.
+        path: path of directory
     """
-    path = generate_path([os.getcwd(), filename])
-    mkdir(path)
+    from pathlib import Path
+
+    p = generate_path([os.getcwd(), path])
+    Path(p).mkdir(parents=True)
+
+
+def create_file_current(path: str, write: str) -> None:
+    """Create the file at the given path.
+
+    With respect to current working directory and also write in file.
+
+    Args:
+        path: path and name of the file.
+        write: things to write on file.
+    """
+    p = generate_path([os.getcwd(), path])
+    with open(p, "w") as f:
+        f.write(write)
