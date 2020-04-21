@@ -3,6 +3,7 @@
 import click
 
 from kalam.cli.build import build
+from kalam.cli.generator import create_new_project
 from .. import __version__
 
 
@@ -14,3 +15,4 @@ def main() -> None:
 
 
 main.add_command(build)
+main.add_command(create_new_project)
