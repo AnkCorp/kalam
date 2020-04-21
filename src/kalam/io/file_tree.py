@@ -61,10 +61,3 @@ class FileTree:
             secho("kalam.config not found", fg="red")
             exit()
         return True
-
-
-f = FileTree()
-f.create_file_tree()
-print(json.dumps(f.file_tree, indent=4))
-print(f.file_list)
-print(len(f.file_list))
