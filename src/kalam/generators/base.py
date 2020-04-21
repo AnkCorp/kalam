@@ -1,6 +1,8 @@
 """This module contain generator class."""
 
+from click import prompt, secho
 import toml
+
 
 from kalam.utils.path import (
     create_file_current,
@@ -15,7 +17,6 @@ class Generator:
 
     def __init__(self: "Generator", filename_with_path: str = "") -> None:
         """Initialize generator instance."""
-
         # File to create
         self.file_to_create = []
 
@@ -42,12 +43,12 @@ class Generator:
         """Setup the project."""
         self.filename_with_path = filename_with_path
         self.input_config_details()
-        self.init_file_to_create()
-        self.create_directory()
-        self.create_files()
+        # self.init_file_to_create()
+        # self.create_directory()
+        # self.create_files()
 
     def init_file_to_create(self: "Generator") -> None:
-        """initialize file to create."""
+        """Initialize file to create."""
         config = toml.dumps(self.config)
         self.file_to_create.append({"filename": "kalam.toml", "write": config})
 
@@ -85,20 +86,18 @@ class Generator:
     def input_config_details(self: "Generator") -> None:
         """Take config details from user."""
         filename = get_path_basename(self.filename_with_path)
-        print("Press enter to choose default")
+        secho(
+            "Press enter to choose default. Default value are in [default]", fg="yellow"
+        )
 
-        res = input("Title (Default: {}): ".format(filename))
-        if res == "":
-            self.config["title"] = filename
-        else:
-            self.config["title"] = res
-
-        res = input("Base URL (Default: {}): ".format(self.config["baseURL"]))
-        if res != "":
-            self.config["baseURL"] = res
-
-        res = input("Language Code (Default: {}): ".format(self.config["languageCode"]))
-        if res != "":
-            self.config["languageCode"] = res
+        self.config["title"] = prompt("Title", default=filename)
+        self.config["baseURL"] = prompt("Base URL", default=self.config["baseURL"])
+        self.config["languageCode"] = prompt(
+            "Language Code", default=self.config["languageCode"]
+        )
 
         print(self.config)
+
+
+g = Generator("../name")
+# g.input_config_details()
