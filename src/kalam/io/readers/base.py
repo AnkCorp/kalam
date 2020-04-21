@@ -2,7 +2,6 @@
 
 from kalam.io.files.base import File
 from kalam.utils.path import (
-    generate_path,
     generate_abs_path,
     get_path_accessed_time,
     get_path_created_time,
