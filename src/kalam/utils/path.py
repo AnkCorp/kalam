@@ -3,7 +3,7 @@
 import os
 
 
-def get_abs_path(filename: str, relative_path_of_target: str) -> str:
+def generate_abs_path(filename: str, relative_path_of_target: str) -> str:
     """Return the abs path of the target file.
 
     Require the calling function filename, and path of target file relative to
@@ -17,7 +17,7 @@ def get_abs_path(filename: str, relative_path_of_target: str) -> str:
         absolute path of the target file.
     """
     dirname = os.path.dirname(os.path.realpath(filename))
-    path = os.path.realpath(os.path.join(dirname, relative_path_of_target))
+    path = os.path.realpath(generate_path([dirname, relative_path_of_target]))
     return path
 
 
