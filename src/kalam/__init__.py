@@ -13,3 +13,4 @@ except PackageNotFoundError:  # pragma: no cover
 from kalam import io  # noqa
 from kalam import jobs  # noqa
 from kalam import pipeline  # noqa
+from kalam import generators  # noqa
