@@ -7,17 +7,17 @@ import toml
 from kalam.utils.path import (
     create_file_current,
     generate_path,
-    get_abs_path,
     get_path_basename,
     mkdir_current,
     path_exist,
+    pwd,
 )
 
 
 class Generator:
     """Base generator class."""
 
-    def __init__(self: "Generator", filename_with_path: str = "") -> None:
+    def __init__(self: "Generator", type: str, filename_with_path: str = "") -> None:
         """Initialize generator instance."""
         # File to create
         self.file_to_create = []
@@ -27,15 +27,14 @@ class Generator:
             "contents",
             "contents_templates",
             "data",
-            "generators/web",
+            f"generators/{type}",
         ]
 
-        # Default configuration
-        self.config = {
-            "title": "",
-            "languageCode": "en-US",
-            "baseURL": "http://localhost:8080",
-        }
+        # Default configuration.
+        self.config = {"title": ""}
+
+        # List of default questions ask to update config file.
+        self.config_questions = []
 
         # If filename_with_path is not empty then call setup
         if filename_with_path != "":
@@ -52,7 +51,7 @@ class Generator:
         else:
             secho(
                 "[Error] Path: '{}' already exists.".format(
-                    get_abs_path(__file__, filename_with_path)
+                    generate_path([pwd(), filename_with_path])
                 ),
                 fg="red",
             )
@@ -108,10 +107,8 @@ class Generator:
         secho("Press 'Enter' to choose default.", fg="yellow")
 
         self.config["title"] = prompt("Title", default=filename)
-        self.config["baseURL"] = prompt("Base URL", default=self.config["baseURL"])
-        self.config["languageCode"] = prompt(
-            "Language Code", default=self.config["languageCode"]
-        )
 
-
-g = Generator("new-project")
+        for question in self.config_questions:
+            self.config[question["property"]] = prompt(
+                question["question"], default=question["default"]
+            )
