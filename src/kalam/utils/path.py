@@ -1,6 +1,7 @@
 """Utility related to file and path operations."""
 
 import os
+from typing import Generator, List
 
 
 def generate_abs_path(filename: str, relative_path_of_target: str) -> str:
@@ -151,3 +152,46 @@ def create_file_current(path: str, write: str) -> None:
 def pwd() -> str:
     """Return the present working directory."""
     return os.getcwd()
+
+
+def tree(path: str) -> Generator[tuple, None, None]:
+    """Return directory list recursively.
+
+    Args:
+        path: path for which directory list is to obtained.
+
+    Returns:
+        Generator function containing directory list.
+    """
+    return os.walk(path)
+
+
+def split_path_directories(path: str) -> List[str]:
+    """Split the path.
+
+    Args:
+        path: path which has to split.
+
+    Returns:
+        List of directories
+    """
+    return path.split(os.path.sep)[1:]
+
+
+def path_diff(first_path: str, second_path: str) -> str:
+    """Obtain the path difference with respect to given two paths.
+
+    Args:
+        first_path: first path.
+        second_path: second path.
+
+    Returns:
+        Path left by subtracting larger path from smaller path.
+    """
+    if len(first_path) < len(second_path):
+        temp = second_path
+        second_path = first_path
+        first_path = temp
+
+    diff = first_path.split(second_path)[1]
+    return diff
