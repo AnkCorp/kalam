@@ -7,8 +7,10 @@ import toml
 from kalam.utils.path import (
     create_file_current,
     generate_path,
+    get_abs_path,
     get_path_basename,
     mkdir_current,
+    path_exist,
 )
 
 
@@ -42,10 +44,18 @@ class Generator:
     def setup(self: "Generator", filename_with_path: str) -> None:
         """Setup the project."""
         self.filename_with_path = filename_with_path
-        self.input_config_details()
-        # self.init_file_to_create()
-        # self.create_directory()
-        # self.create_files()
+        if not path_exist(filename_with_path):
+            self.input_config_details()
+            self.init_file_to_create()
+            self.create_directory()
+            self.create_files()
+        else:
+            secho(
+                "[Error] Path: '{}' already exists.".format(
+                    get_abs_path(__file__, filename_with_path)
+                ),
+                fg="red",
+            )
 
     def init_file_to_create(self: "Generator") -> None:
         """Initialize file to create."""
@@ -61,13 +71,15 @@ class Generator:
                 mkdir_current(generate_path([filename_with_path, path]))
 
         except OSError as e:
-            print(
-                "[Generator Error] Unable to create directory. Given path: {}".format(
-                    filename_with_path
-                )
+            secho(
+                "[Generator] Process failed.\n[Reason] {}".format(
+                    filename_with_path, e.strerror
+                ),
+                fg="red",
             )
 
-            print("[Reason] {}".format(e.strerror))
+            # Terminate the program
+            exit()
 
     def create_files(self: "Generator") -> None:
         """Create files."""
@@ -80,15 +92,20 @@ class Generator:
                 )
 
         except OSError as e:
-            print("[Generator Error] Unable to create files. {}")
-            print("[Reason] {}".format(e.strerror))
+            secho(
+                "[Generator] Process failed while writing on {}\n[Reason] {}".format(
+                    item["filename"], e.strerror
+                ),
+                fg="red",
+            )
+
+            # Terminate the program
+            exit()
 
     def input_config_details(self: "Generator") -> None:
         """Take config details from user."""
         filename = get_path_basename(self.filename_with_path)
-        secho(
-            "Press enter to choose default. Default value are in [default]", fg="yellow"
-        )
+        secho("Press 'Enter' to choose default.", fg="yellow")
 
         self.config["title"] = prompt("Title", default=filename)
         self.config["baseURL"] = prompt("Base URL", default=self.config["baseURL"])
@@ -96,8 +113,5 @@ class Generator:
             "Language Code", default=self.config["languageCode"]
         )
 
-        print(self.config)
 
-
-g = Generator("../name")
-# g.input_config_details()
+g = Generator("new-project")
