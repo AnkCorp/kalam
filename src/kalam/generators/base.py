@@ -1,5 +1,7 @@
 """This module contain generator class."""
 
+from sys import exit
+
 from click import prompt, secho
 import toml
 
