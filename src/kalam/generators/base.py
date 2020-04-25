@@ -2,7 +2,7 @@
 
 from sys import exit
 
-from click import prompt, secho
+from click import BOOL, prompt, secho
 import toml
 
 
@@ -36,7 +36,14 @@ class Generator:
         self.config = {"title": ""}
 
         # List of default questions ask to update config file.
-        self.config_questions = []
+        self.config_questions = [
+            {
+                "question": "Git Enable (Yes/No)",
+                "property": "git_enable",
+                "default": "Yes",
+                "type": BOOL,
+            }
+        ]
 
         # If filename_with_path is not empty then call setup
         if filename_with_path != "":
@@ -50,6 +57,8 @@ class Generator:
             self.init_file_to_create()
             self.create_directory()
             self.create_files()
+            if "git_enable" in self.config and self.config["git_enable"]:
+                self.setup_git()
         else:
             secho(
                 "[Error] Path: '{}' already exists.".format(
@@ -112,5 +121,14 @@ class Generator:
 
         for question in self.config_questions:
             self.config[question["property"]] = prompt(
-                question["question"], default=question["default"]
+                question["question"],
+                default=question["default"],
+                type=question["type"] if "type" in question else str,
             )
+
+    def setup_git(self: "Generator") -> None:
+        """Initialize directory as git repo."""
+        from git import Repo
+
+        filename_with_path = self.filename_with_path
+        Repo.init(filename_with_path)
