@@ -1,5 +1,6 @@
 """This module contain generator class."""
 
+from getpass import getuser
 from sys import exit
 
 from click import BOOL, prompt, secho
@@ -38,11 +39,17 @@ class Generator:
         # List of default questions ask to update config file.
         self.config_questions = [
             {
+                "question": "Author",
+                "property": "author",
+                "default": getuser(),
+                "type": str,
+            },
+            {
                 "question": "Git Enable (Yes/No)",
                 "property": "git_enable",
                 "default": "Yes",
                 "type": BOOL,
-            }
+            },
         ]
 
         # If filename_with_path is not empty then call setup
