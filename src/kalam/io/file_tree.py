@@ -1,6 +1,5 @@
 """File tree module."""
 
-import json
 from sys import exit
 
 from click import secho
