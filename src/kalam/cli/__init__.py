@@ -1,3 +1,3 @@
 """Cli module."""
 
-from .console import main  # noqa
+from .main import main  # noqa

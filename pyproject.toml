@@ -43,7 +43,7 @@ codecov = "^2.0.15"
 pre-commit = "^2.2.0"
 
 [tool.poetry.scripts]
-kalam = "kalam.cli.console:main"
+kalam = "kalam.cli.main:main"
 
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]
