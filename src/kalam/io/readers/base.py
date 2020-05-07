@@ -2,44 +2,48 @@
 
 from kalam.io.files.base import File
 from kalam.utils.path import (
-    generate_abs_path,
     get_path_accessed_time,
     get_path_created_time,
     get_path_modified_time,
-    path_exist,
 )
 
 
 class Reader:
-    """Reader class."""
+    """Reader class.
+    
+    Here we are not checking whether path exist or not because this class
+    assumes that the path given to it exists.
+
+    Also path is absolute path not relative.
+    """
 
     def __init__(self: "Reader") -> None:
         """Initialize reader instance."""
         self.reader = dict()
         self.file = File()
 
-    def open(self: "Reader", path: str) -> None:
-        """Open file."""
-        abs_path = generate_abs_path(__file__, path)
-        try:
-            if path_exist(abs_path):
-                with open(abs_path) as file_data:
-                    self.file.set_file_info(
-                        {
-                            "path": abs_path,
-                            "raw": file_data.read(),
-                            "metadata": {
-                                "created_at": get_path_created_time(abs_path),
-                                "accessed_at": get_path_accessed_time(abs_path),
-                                "modified_at": get_path_modified_time(abs_path),
-                            },
-                        }
-                    )
-            else:
-                raise OSError
+    def init_file_for_packing(self: "Reader", path: str) -> None:
+        """Initialize file so that it becomes ready for packing."""
+        self.file.set_file_info_for_packing(
+            {
+                "path": path,
+                "metadata": {
+                    "created_at": get_path_created_time(path),
+                    "accessed_at": get_path_accessed_time(path),
+                    "modified_at": get_path_modified_time(path),
+                },
+            }
+        )
 
-        except OSError:
-            print("[Reader Error] Path doesn't exist. path: {}".format(abs_path))
+    def set_raw_data(self: "Reader") -> None:
+        """Read the file and return file object."""
+        with open(self.file.file_path()) as file_data:
+            self.file.set_file_raw_data(file_data.read())
 
-        except IOError:
-            print("[Reader Error] Could not read file at: {}".format(abs_path))
+    def get_file_instance(self: "Reader") -> File:
+        """Return the file instance."""
+        return self.file
+
+    def get_file(self: "Reader") -> File:
+        """Return the file dict"""
+        return self.file.file
