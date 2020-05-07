@@ -10,6 +10,7 @@ file_types = {
     ".rst": "RESTRUCTURED_TEXT_FILE",
     ".tex": "TEX",
     ".js": "JAVASCRIPT",
+    ".json": "JSON",
     ".py": "PYTHON",
     ".jsx": "JAVASCRIPT_EXTENDED",
     ".toml": "TOML",
