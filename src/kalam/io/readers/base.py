@@ -44,6 +44,6 @@ class Reader:
         """Return the file instance."""
         return self.file
 
-    def get_file(self: "Reader") -> File:
+    def get_file(self: "Reader") -> dict:
         """Return the file dict"""
         return self.file.file

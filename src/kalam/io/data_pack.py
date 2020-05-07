@@ -1,6 +1,6 @@
 """Data Package class."""
 
-from typing import Any
+from typing import Any, List
 
 
 class DataPack:
@@ -8,10 +8,9 @@ class DataPack:
 
     def __init__(self: "DataPack") -> None:
         """Initialize a data package."""
-        self.identifiers = []
-        self.descriptors = []
-        self.units = []
-        pass
+        self.identifiers: List[str] = []
+        self.descriptors: List[str] = []
+        self.units: List[Any] = []
 
     def add_identifier(self: "DataPack", identifier: str) -> None:
         """Adds an identifier."""

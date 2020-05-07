@@ -1,7 +1,7 @@
 """Utility related to file and path operations."""
 
 import os
-from typing import Generator, List
+from typing import Iterator, List, Tuple
 
 
 def generate_abs_path(filename: str, relative_path_of_target: str) -> str:
@@ -154,7 +154,7 @@ def pwd() -> str:
     return os.getcwd()
 
 
-def tree(path: str) -> Generator[tuple, None, None]:
+def tree(path: str) -> Iterator[Tuple[str, List[str], List[str]]]:
     """Return directory list recursively.
 
     Args:
