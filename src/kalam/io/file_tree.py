@@ -20,7 +20,7 @@ class FileTree:
     def __init__(self: "FileTree") -> None:
         """Initialize."""
         self.file_tree = dict()
-        self.file_list = list()
+        # self.file_list = list()
 
     def create_file_tree(self: "FileTree") -> None:
         """Create file tree."""
@@ -33,7 +33,7 @@ class FileTree:
                 for f in files:
                     p = generate_path([root, f])
                     current[f] = p
-                    self.file_list.append(p)
+                    # self.file_list.append(p)
 
                 # Traversing and storing all directories in current directory.
                 for d in dirs:
@@ -60,3 +60,6 @@ class FileTree:
             secho("kalam.config not found", fg="red")
             exit()
         return True
+
+    def get_dir_dict(self: "FileTree", key: str) -> dict:
+        return self.file_tree[key]
