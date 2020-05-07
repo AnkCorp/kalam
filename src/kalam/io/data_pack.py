@@ -6,12 +6,11 @@ from typing import Any
 class DataPack:
     """Creates a data package."""
 
-    identifiers = []
-    descriptors = []
-    units = []
-
     def __init__(self: "DataPack") -> None:
         """Initialize a data package."""
+        self.identifiers = []
+        self.descriptors = []
+        self.units = []
         pass
 
     def add_identifier(self: "DataPack", identifier: str) -> None:
