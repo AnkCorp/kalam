@@ -14,13 +14,13 @@ class Packer:
 
     def __init__(self: "Packer") -> None:
         """Initialize packer instance."""
-        self.packer: List[DataPack] = []
+        self.file_packs: List[DataPack] = []
         self.file_tree = FileTree()
         self.dir_to_read = ["contents", "contents_templates", "data", "generators"]
 
     def create_tree(self: "Packer") -> None:
         """Run file tree."""
-        self.file_tree.create_file_tree()
+        self.file_tree.create_file_tree(self.dir_to_read)
 
     def read_files_from_dirs(self: "Packer") -> None:
         """Read files from the dirs."""
@@ -34,7 +34,7 @@ class Packer:
                     file_instances.append(reader.get_file_instance())
 
                 for instance in file_instances:
-                    for data_pack in self.packer:
+                    for data_pack in self.file_packs:
                         if [dir, instance.filetype()] == data_pack.identifiers:
                             data_pack.add_unit(instance)
                             break
@@ -43,9 +43,9 @@ class Packer:
                         new_data_pack.add_identifier(dir)
                         new_data_pack.add_identifier(instance.filetype())
                         new_data_pack.add_unit(instance)
-                        self.packer.append(new_data_pack)
+                        self.file_packs.append(new_data_pack)
 
-        for p in self.packer:
+        for p in self.file_packs:
             print(p.identifiers)
             for unit in p.units:
                 print(unit.file_path(), unit.file["filename"])
@@ -53,4 +53,5 @@ class Packer:
     def pack(self: "Packer") -> None:
         """Pack all files."""
         self.create_tree()
-        self.read_files_from_dirs()
+        # self.read_files_from_dirs()
+        # print(self.file_tree.get_file_tree())

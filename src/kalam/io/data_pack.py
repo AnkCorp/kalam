@@ -1,6 +1,7 @@
 """Data Package class."""
 
 from typing import Any, List
+import uuid
 
 from kalam.io.files import File
 
@@ -13,6 +14,9 @@ class DataPack:
         self.identifiers: List[str] = []
         self.descriptors: List[str] = []
         self.units: List[File] = []
+        self.id: uuid.UUID = uuid.uuid4()
+        self.assets: List[File] = []
+        self.url: str = ""
 
     def add_identifier(self: "DataPack", identifier: str) -> None:
         """Adds an identifier."""

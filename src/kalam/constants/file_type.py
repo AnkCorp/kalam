@@ -14,4 +14,5 @@ file_types = {
     ".py": "PYTHON",
     ".jsx": "JAVASCRIPT_EXTENDED",
     ".toml": "TOML",
+    ".css": "CSS",
 }

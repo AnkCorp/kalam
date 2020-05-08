@@ -19,5 +19,5 @@ def build() -> None:
     pipeline.run()
     click.secho(f"Did it!!!", fg="green")
 
-    packer = Packer()
-    packer.pack()
+    p = Packer()
+    p.pack()

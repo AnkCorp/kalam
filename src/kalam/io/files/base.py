@@ -37,7 +37,13 @@ class File:
 
     def __init__(self: "File") -> None:
         """Initialize file instance."""
-        self.file: FileDict
+        self.file: FileDict = {
+            "path": "",
+            "raw": "",
+            "metadata": {"created_at": "", "accessed_at": "", "modified_at": ""},
+            "filename": "",
+            "filetype": "",
+        }
 
     def set_file_info_for_packing(self: "File", data: FileDictArg) -> None:
         """Set file info for packing."""
