@@ -25,8 +25,8 @@ class Packer:
     def read_files_from_dirs(self: "Packer") -> None:
         """Read files from the dirs."""
         for dir in self.dir_to_read:
-            if dir in self.file_tree.file_tree:
-                files = dict_all_value_in_list(self.file_tree.get_dir_dict(dir))
+            if dir in self.file_tree.get_file_tree():
+                files = dict_all_value_in_list(dict(self.file_tree.get_dir_dict(dir)))
                 file_instances: List[File] = []
                 for file in files:
                     reader = Reader()
@@ -44,6 +44,11 @@ class Packer:
                         new_data_pack.add_identifier(instance.filetype())
                         new_data_pack.add_unit(instance)
                         self.packer.append(new_data_pack)
+
+        for p in self.packer:
+            print(p.identifiers)
+            for unit in p.units:
+                print(unit.file_path(), unit.file["filename"])
 
     def pack(self: "Packer") -> None:
         """Pack all files."""

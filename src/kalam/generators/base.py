@@ -145,7 +145,7 @@ class Generator:
 
     def setup_git(self: "Generator") -> None:
         """Initialize directory as git repo."""
-        from git import Repo
+        from git import Repo  # type: ignore
 
         filename_with_path = self.filename_with_path
         Repo.init(filename_with_path)

@@ -1,6 +1,6 @@
 """Core pipeline class."""
 
-from typing import List, Optional
+from typing import List
 
 from kalam.jobs import Job
 from .runner import Runner

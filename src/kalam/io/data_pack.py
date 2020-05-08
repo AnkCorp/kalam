@@ -2,6 +2,8 @@
 
 from typing import Any, List
 
+from kalam.io.files import File
+
 
 class DataPack:
     """Creates a data package."""
@@ -10,7 +12,7 @@ class DataPack:
         """Initialize a data package."""
         self.identifiers: List[str] = []
         self.descriptors: List[str] = []
-        self.units: List[Any] = []
+        self.units: List[File] = []
 
     def add_identifier(self: "DataPack", identifier: str) -> None:
         """Adds an identifier."""

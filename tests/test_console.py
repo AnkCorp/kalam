@@ -13,12 +13,12 @@ def runner() -> CliRunner:
 
 def test_main_succeeds(runner: CliRunner) -> None:
     """It exits with a status code of zero."""
-    result = runner.invoke(console.main)
+    result = runner.invoke(console)
     assert result.exit_code == 0
 
 
 @pytest.mark.e2e
 def test_main_succeeds_in_production_env(runner: CliRunner) -> None:
     """It exits with a status code of zero (end-to-end)."""
-    result = runner.invoke(console.main)
+    result = runner.invoke(console)
     assert result.exit_code == 0

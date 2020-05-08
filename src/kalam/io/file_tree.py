@@ -68,6 +68,10 @@ class FileTree:
             exit()
         return True
 
-    def get_dir_dict(self: "FileTree", key: str) -> Union[str, FileTreeDict]:
+    def get_dir_dict(self: "FileTree", key: str) -> FileTreeDict:
         """Return the value/path of the dir."""
         return self.file_tree[key]
+
+    def get_file_tree(self: "FileTree") -> FileTreeDict:
+        """Return the file tree dictionary."""
+        return self.file_tree
