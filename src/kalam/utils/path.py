@@ -1,7 +1,7 @@
 """Utility related to file and path operations."""
 
 import os
-from typing import Iterator, List, Optional, Tuple
+from typing import Iterator, List, Tuple
 
 
 def generate_abs_path(filename: str, relative_path_of_target: str) -> str:
@@ -109,7 +109,7 @@ def get_path_created_time(path: str) -> float:
     return os.path.getctime(path)
 
 
-def mkdir(path: str) -> Optional[bool]:
+def mkdir(path: str) -> bool:
     """Create the path.
 
     It first check whether path already exist or not, then creates
@@ -122,7 +122,7 @@ def mkdir(path: str) -> Optional[bool]:
     """
     if not path_exist(path):
         os.mkdir(path)
-        return None
+        return True
     else:
         return False
 

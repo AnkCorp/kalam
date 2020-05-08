@@ -80,8 +80,7 @@ def test_mkdir() -> None:
     Assuming test_folder didn't exist
     """
     path = path_util.generate_abs_path(__file__, "test_folder")
-    path_util.mkdir(path)
-    assert path_util.path_exist(path) is True
+    assert path_util.mkdir(path) is True
     assert path_util.mkdir(path) is False
     path_util.rmdir(path)
 
