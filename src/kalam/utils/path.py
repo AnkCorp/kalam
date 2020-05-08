@@ -1,7 +1,7 @@
 """Utility related to file and path operations."""
 
 import os
-from typing import Iterator, List, Tuple
+from typing import Iterator, List, Optional, Tuple
 
 
 def generate_abs_path(filename: str, relative_path_of_target: str) -> str:
@@ -44,7 +44,7 @@ def get_path_basename(path: str) -> str:
         path: path of the target file.
 
     Returns:
-        Return the filename.
+        Return the filename (with extension, if present/appliable).
     """
     return os.path.basename(path)
 
@@ -109,16 +109,22 @@ def get_path_created_time(path: str) -> float:
     return os.path.getctime(path)
 
 
-def mkdir(path: str) -> None:
+def mkdir(path: str) -> Optional[bool]:
     """Create the path.
 
     It first check whether path already exist or not, then creates
 
     Args:
         path: path to create.
+
+    Returns:
+        If path already exist it returns false.
     """
     if not path_exist(path):
         os.mkdir(path)
+        return None
+    else:
+        return False
 
 
 def mkdir_current(path: str) -> None:
@@ -133,6 +139,15 @@ def mkdir_current(path: str) -> None:
 
     p = generate_path([os.getcwd(), path])
     Path(p).mkdir(parents=True)
+
+
+def rmdir(path: str) -> None:
+    """Remove directory.
+
+    Args:
+        path: path which has to be removed/deleted.
+    """
+    os.rmdir(path)
 
 
 def create_file_current(path: str, write: str) -> None:
@@ -161,7 +176,7 @@ def tree(path: str) -> Iterator[Tuple[str, List[str], List[str]]]:
         path: path for which directory list is to obtained.
 
     Returns:
-        Generator function containing directory list.
+        Iterator function containing directory list.
     """
     return os.walk(path)
 
