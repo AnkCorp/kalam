@@ -2,6 +2,7 @@
 
 from getpass import getuser
 from sys import exit
+from typing import Any, Dict, List, TypedDict
 
 from click import BOOL, prompt, secho
 import toml
@@ -17,13 +18,22 @@ from kalam.utils.path import (
 )
 
 
+class ConfigFileDict(TypedDict):
+    """Dictionary shape for config file dictionary."""
+
+    question: str
+    property: str
+    default: str
+    type: Any
+
+
 class Generator:
     """Base generator class."""
 
     def __init__(self: "Generator", type: str, filename_with_path: str = "") -> None:
         """Initialize generator instance."""
         # File to create
-        self.file_to_create = []
+        self.file_to_create: List[Dict[str, str]] = []
 
         # Directory to create
         self.dir_to_create = [
@@ -34,10 +44,10 @@ class Generator:
         ]
 
         # Default configuration.
-        self.config = {"title": ""}
+        self.config: Dict[str, str] = {"title": ""}
 
         # List of default questions ask to update config file.
-        self.config_questions = [
+        self.config_questions: List[ConfigFileDict] = [
             {
                 "question": "Author",
                 "property": "author",
@@ -89,7 +99,7 @@ class Generator:
 
         except OSError as e:
             secho(
-                "[Generator] Process failed.\n[Reason] {}".format(
+                "[Generator] Process failed while creating {}.\n[Reason] {}".format(
                     filename_with_path, e.strerror
                 ),
                 fg="red",

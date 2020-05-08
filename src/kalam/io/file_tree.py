@@ -1,6 +1,7 @@
 """File tree module."""
 
 from sys import exit
+from typing import Dict, Union
 
 from click import secho
 
@@ -14,12 +15,18 @@ from kalam.utils.path import (
 )
 
 
+class FileTreeDict(Dict):
+    """Dictionary shape for File Tree Dictionary."""
+
+    str: Union[str, Dict[str, str]]
+
+
 class FileTree:
     """Create a list of file which has to be processed."""
 
     def __init__(self: "FileTree") -> None:
         """Initialize."""
-        self.file_tree = dict()
+        self.file_tree = FileTreeDict()
         # self.file_list = list()
 
     def create_file_tree(self: "FileTree") -> None:
@@ -28,7 +35,7 @@ class FileTree:
 
         if self.check_config_file():
             for root, dirs, files in tree(path):
-                current = dict()
+                current = FileTreeDict()
                 # Traversing and storing all files in current directory.
                 for f in files:
                     p = generate_path([root, f])
@@ -37,7 +44,7 @@ class FileTree:
 
                 # Traversing and storing all directories in current directory.
                 for d in dirs:
-                    current[d] = dict()
+                    current[d] = FileTreeDict()
 
                 # Getting the key as a list.
                 paths = split_path_directories(path_diff(path, root))
@@ -61,5 +68,6 @@ class FileTree:
             exit()
         return True
 
-    def get_dir_dict(self: "FileTree", key: str) -> dict:
+    def get_dir_dict(self: "FileTree", key: str) -> Union[str, FileTreeDict]:
+        """Return the value/path of the dir."""
         return self.file_tree[key]

@@ -15,11 +15,13 @@ class WebGenerator(Generator):
                     "question": "Base URL",
                     "property": "baseURL",
                     "default": "http://localhost:8080",
+                    "type": str,
                 },
                 {
                     "question": "Langauge Code",
                     "property": "langaugeCode",
                     "default": "en-US",
+                    "type": str,
                 },
             ]
         )

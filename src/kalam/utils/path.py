@@ -118,7 +118,7 @@ def mkdir(path: str) -> None:
         path: path to create.
     """
     if not path_exist(path):
-        os.path.mkdir(path)
+        os.mkdir(path)
 
 
 def mkdir_current(path: str) -> None:

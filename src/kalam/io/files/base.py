@@ -1,5 +1,7 @@
 """This module contain file class."""
 
+from typing import TypedDict
+
 from kalam.constants.file_type import file_types, UNKNOWN
 from kalam.utils.path import (
     get_file_extension_from_path,
@@ -7,14 +9,37 @@ from kalam.utils.path import (
 )
 
 
+class MetadataDict(TypedDict):
+    """Dictionary shape for Metadata."""
+
+    created_at: float
+    accessed_at: float
+    modified_at: float
+
+
+class FileDictArg(TypedDict):
+    """Dictionary shape for File argument."""
+
+    path: str
+    metadata: dict
+
+
+class FileDict(FileDictArg):
+    """Dictionary shape for File."""
+
+    filename: str
+    filetype: str
+    raw: str
+
+
 class File:
     """Base class for file."""
 
     def __init__(self: "File") -> None:
         """Initialize file instance."""
-        self.file = dict()
+        self.file: FileDict
 
-    def set_file_info_for_packing(self: "File", data: dict) -> None:
+    def set_file_info_for_packing(self: "File", data: FileDictArg) -> None:
         """Set file info for packing."""
         self.file["path"] = data["path"]
         self.file["filename"] = get_path_basename(data["path"])

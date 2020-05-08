@@ -10,7 +10,7 @@ def dict_all_value_in_list(d: dict) -> List[str]:
         d: A dictionary.
 
     Returns:
-        A list of all values.
+        A list of all values. 
     """
     all_values: List[str] = []
     for _, value in d.items():
