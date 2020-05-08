@@ -1,6 +1,6 @@
 """Core pipeline class."""
 
-from typing import List
+from typing import List, Optional
 
 from kalam.jobs import Job
 from .runner import Runner
@@ -10,7 +10,7 @@ class Pipeline:
     """Constructs a pipeline."""
 
     jobs: List[Job] = []
-    runner: Runner = None
+    runner = Runner()
 
     def add_job(self: "Pipeline", job: Job) -> None:
         """Add a job to the pipeline.
