@@ -1,12 +1,13 @@
 """File tree module."""
 
 from sys import exit
-from typing import Dict, Union
+from typing import Dict, List, Union
 
 from click import secho
 
 from kalam.utils.path import (
     generate_path,
+    get_path_basename,
     path_diff,
     path_exist,
     pwd,
@@ -29,34 +30,48 @@ class FileTree:
         self.file_tree = FileTreeDict()
         # self.file_list = list()
 
-    def create_file_tree(self: "FileTree") -> None:
+    def create_file_tree(self: "FileTree", dir_to_read: List[str]) -> None:
         """Create file tree."""
         path = pwd()
-
         if self.check_config_file():
-            for root, dirs, files in tree(path):
-                current = FileTreeDict()
-                # Traversing and storing all files in current directory.
-                for f in files:
-                    p = generate_path([root, f])
-                    current[f] = p
-                    # self.file_list.append(p)
+            dir_to_read = [generate_path([path, dir]) for dir in dir_to_read]
 
-                # Traversing and storing all directories in current directory.
-                for d in dirs:
-                    current[d] = FileTreeDict()
+            for dir in dir_to_read:
+                for root, dirs, files in tree(dir):
+                    # current = FileTreeDict()
 
-                # Getting the key as a list.
-                paths = split_path_directories(path_diff(path, root))
+                    if len(files) != 0:
+                        print(
+                            split_path_directories(path_diff(root, path)), dirs, files
+                        )
 
-                # Current dictionary to update.
-                current_dict = self.file_tree
+                    # print(root, dirs, files)
+                    # for file in files:
+                    #     print(root, dirs)
+                    #     print(file)
+                    # Traversing and storing all files in current directory.
+                    # for f in files:
+                    #     p = generate_path([root, f])
+                    #     current[f] = p
+                    #     print(p, files)
+                    #     self.file_list.append(p)
 
-                # Get current key to update.
-                for p in paths:
-                    current_dict = current_dict[p]
+                    # Traversing and storing all directories in current directory.
+                    # for d in dirs:
+                    #     current[d] = FileTreeDict()
+                    #     print(d)
 
-                current_dict.update(current)
+                    # # Getting the key as a list.
+                    # paths = split_path_directories(path_diff(path, root))
+
+                    # # Current dictionary to update.
+                    # current_dict = self.file_tree
+
+                    # # Get current key to update.
+                    # for p in paths:
+                    #     current_dict = current_dict[p]
+
+                    # current_dict.update(current)
 
     def check_config_file(self: "FileTree") -> bool:
         """Check whether kalam.toml exist in present directory or not."""
