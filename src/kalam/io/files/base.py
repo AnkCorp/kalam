@@ -58,7 +58,7 @@ class File:
         """Set raw data to the file."""
         self.file["raw"] = data
 
-    def file_path(self: "File") -> str:
+    def filepath(self: "File") -> str:
         """Return the path of the file."""
         if "path" in self.file:
             return self.file["path"]
@@ -71,3 +71,10 @@ class File:
             return self.file["filetype"]
         else:
             raise KeyError("[File Error] File type is not set.")
+
+    def filename(self: "File") -> str:
+        """Return the name of the file."""
+        if "filetype" in self.file:
+            return self.file["filename"]
+        else:
+            raise KeyError("[File Error] File name is not set.")

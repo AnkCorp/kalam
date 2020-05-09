@@ -6,7 +6,7 @@ from kalam.io.data_pack import DataPack
 from kalam.io.file_tree import FileTree
 from kalam.io.files import File
 from kalam.io.readers import Reader
-from kalam.utils.dict import dict_all_value_in_list
+from kalam.utils.path import generate_path
 
 
 class Packer:
@@ -16,42 +16,41 @@ class Packer:
         """Initialize packer instance."""
         self.file_packs: List[DataPack] = []
         self.file_tree = FileTree()
-        self.dir_to_read = ["contents", "contents_templates", "data", "generators"]
+        self.extra_dirs: List[str] = []
 
     def create_tree(self: "Packer") -> None:
         """Run file tree."""
-        self.file_tree.create_file_tree(self.dir_to_read)
+        self.file_tree.create_file_tree(self.extra_dirs)
 
-    def read_files_from_dirs(self: "Packer") -> None:
-        """Read files from the dirs."""
-        for dir in self.dir_to_read:
-            if dir in self.file_tree.get_file_tree():
-                files = dict_all_value_in_list(dict(self.file_tree.get_dir_dict(dir)))
-                file_instances: List[File] = []
-                for file in files:
-                    reader = Reader()
-                    reader.init_file_for_packing(file)
-                    file_instances.append(reader.get_file_instance())
+    def get_file_object(self: "Packer", file_list: List[str]) -> List[File]:
+        """Return the file object after reading the files."""
+        file_objects: List[File] = []
+        for file in file_list:
+            r = Reader()
+            r.init_file_for_packing(file)
+            file_objects.append(r.get_file_instance())
+        return file_objects
 
-                for instance in file_instances:
-                    for data_pack in self.file_packs:
-                        if [dir, instance.filetype()] == data_pack.identifiers:
-                            data_pack.add_unit(instance)
-                            break
-                    else:
-                        new_data_pack = DataPack()
-                        new_data_pack.add_identifier(dir)
-                        new_data_pack.add_identifier(instance.filetype())
-                        new_data_pack.add_unit(instance)
-                        self.file_packs.append(new_data_pack)
+    def pack_files_from_tree(self: "Packer") -> None:
+        """Pack the file in data pack using file tree."""
+        for file_tree in self.file_tree.get_tree():
+            # Get file objects
+            file_objects = self.get_file_object(file_tree["files"])
 
-        for p in self.file_packs:
-            print(p.identifiers)
-            for unit in p.units:
-                print(unit.file_path(), unit.file["filename"])
+            # Get assets object
+            assets_objects = self.get_file_object(file_tree["assets"])
+
+            # Set data into data pack format
+            data_pack = DataPack()
+            data_pack.add_assets(assets_objects)
+            data_pack.add_units(file_objects)
+            data_pack.add_identifiers(file_tree["identifiers"])
+            data_pack.set_url(generate_path(file_tree["identifiers"]))
+
+            # append data to file packs
+            self.file_packs.append(data_pack)
 
     def pack(self: "Packer") -> None:
         """Pack all files."""
         self.create_tree()
-        # self.read_files_from_dirs()
-        # print(self.file_tree.get_file_tree())
+        self.pack_files_from_tree()

@@ -1,6 +1,6 @@
 """Data Package class."""
 
-from typing import Any, List
+from typing import List
 import uuid
 
 from kalam.io.files import File
@@ -18,17 +18,22 @@ class DataPack:
         self.assets: List[File] = []
         self.url: str = ""
 
-    def add_identifier(self: "DataPack", identifier: str) -> None:
-        """Adds an identifier."""
-        if identifier not in self.identifiers:
-            self.identifiers.append(identifier)
+    def add_identifiers(self: "DataPack", identifiers: List[str]) -> None:
+        """Adds a list identifiers."""
+        self.identifiers = self.identifiers + identifiers
 
-    def add_descriptor(self: "DataPack", descriptor: str) -> None:
-        """Adds a descriptor."""
-        if descriptor not in self.descriptors:
-            self.descriptors.append(descriptor)
+    def add_descriptors(self: "DataPack", descriptors: List[str]) -> None:
+        """Adds a list descriptors."""
+        self.descriptors = self.descriptors + descriptors
 
-    def add_unit(self: "DataPack", unit: Any) -> None:
-        """Adds a Data Unit."""
-        if unit not in self.units:
-            self.units.append(unit)
+    def add_units(self: "DataPack", units: List[File]) -> None:
+        """Adds a list Data Units."""
+        self.units = self.units + units
+
+    def add_assets(self: "DataPack", assets: List[File]) -> None:
+        """Adds a list of assets."""
+        self.assets = self.assets + assets
+
+    def set_url(self: "DataPack", url: str) -> None:
+        """Set the url."""
+        self.url = url

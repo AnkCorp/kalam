@@ -210,3 +210,21 @@ def path_diff(first_path: str, second_path: str) -> str:
 
     diff = first_path.split(second_path)[1]
     return diff
+
+
+def dir_in_ignore_list(path: str, ignore_list: List[str]) -> bool:
+    """To check whether dir in ignore list or not.
+        
+        Args:
+            path: Path to check whether it is in ignore list or not
+            ignore_list: List of path that are ignored.
+
+        Returns:
+            True of False depending on test.
+        """
+    length = len([dir for dir in ignore_list if dir in path])
+
+    if length == 0:
+        return False
+    return True
+

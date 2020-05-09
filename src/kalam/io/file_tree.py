@@ -1,13 +1,14 @@
 """File tree module."""
 
 from sys import exit
-from typing import Dict, List, Union
+from typing import List, TypedDict
 
 from click import secho
 
+import kalam.constants.default_dirs as default_dirs
 from kalam.utils.path import (
+    dir_in_ignore_list,
     generate_path,
-    get_path_basename,
     path_diff,
     path_exist,
     pwd,
@@ -16,10 +17,13 @@ from kalam.utils.path import (
 )
 
 
-class FileTreeDict(Dict):
+class FileTreeDict(TypedDict):
     """Dictionary shape for File Tree Dictionary."""
 
-    str: Union[str, Dict[str, str]]
+    identifiers: List[str]
+    url: str
+    files: List[str]
+    assets: List[str]
 
 
 class FileTree:
@@ -27,51 +31,80 @@ class FileTree:
 
     def __init__(self: "FileTree") -> None:
         """Initialize."""
-        self.file_tree = FileTreeDict()
-        # self.file_list = list()
+        # For data pack
+        self.file_tree: List[FileTreeDict] = []
 
-    def create_file_tree(self: "FileTree", dir_to_read: List[str]) -> None:
+        # For watcher
+        self.file_list: List[str] = []
+
+    def get_all_files_in_dir(self: "FileTree", dir: str) -> List[str]:
+        """Returns all the files in the directory."""
+        file_list: List[str] = []
+        for root, _, files in tree(dir):
+            for file in files:
+                file_list.append(generate_path([root, file]))
+        return file_list
+
+    def process_content_type_dir(self: "FileTree", dir: str) -> None:
+        """Process content type dirs."""
+        dir_to_ignore: List[str] = []
+
+        for root, dirs, files in tree(dir):
+            assets: List[str] = []
+
+            if not dir_in_ignore_list(root, dir_to_ignore):
+                if len(files) != 0:
+                    file_list = [generate_path([root, f]) for f in files]
+                    self.file_list = self.file_list + file_list
+
+                    if bool(dirs):
+                        dir_to_ignore = dir_to_ignore + [
+                            generate_path([root, d]) for d in dirs
+                        ]
+                        if "assets" in dirs:
+                            assets = self.get_all_files_in_dir(
+                                generate_path([root, "assets"])
+                            )
+
+                    identifiers = split_path_directories(path_diff(pwd(), root))
+                    self.file_tree.append(
+                        {
+                            "identifiers": identifiers,
+                            "url": generate_path(identifiers),
+                            "assets": assets,
+                            "files": file_list,
+                        }
+                    )
+
+    def process_normal_dir(self: "FileTree", dir: str) -> None:
+        """Process normal_dirs."""
+        for root, _, files in tree(dir):
+            if len(files) != 0:
+                files = [generate_path([root, file]) for file in files]
+                self.file_list = self.file_list + files
+                identifiers = split_path_directories(path_diff(pwd(), root))
+                self.file_tree.append(
+                    {
+                        "identifiers": identifiers,
+                        "url": generate_path(identifiers),
+                        "assets": [],
+                        "files": files,
+                    }
+                )
+
+    def create_file_tree(self: "FileTree", extra_dirs: List[str]) -> None:
         """Create file tree."""
-        path = pwd()
+        root = pwd()
         if self.check_config_file():
-            dir_to_read = [generate_path([path, dir]) for dir in dir_to_read]
+            self.process_content_type_dir(generate_path([root, default_dirs.CONTENTS]))
+            self.process_normal_dir(
+                generate_path([root, default_dirs.CONTENTS_TEMPLATES])
+            )
+            self.process_normal_dir(generate_path([root, default_dirs.DATA]))
+            self.process_normal_dir(generate_path([root, default_dirs.GENERATORS]))
 
-            for dir in dir_to_read:
-                for root, dirs, files in tree(dir):
-                    # current = FileTreeDict()
-
-                    if len(files) != 0:
-                        print(
-                            split_path_directories(path_diff(root, path)), dirs, files
-                        )
-
-                    # print(root, dirs, files)
-                    # for file in files:
-                    #     print(root, dirs)
-                    #     print(file)
-                    # Traversing and storing all files in current directory.
-                    # for f in files:
-                    #     p = generate_path([root, f])
-                    #     current[f] = p
-                    #     print(p, files)
-                    #     self.file_list.append(p)
-
-                    # Traversing and storing all directories in current directory.
-                    # for d in dirs:
-                    #     current[d] = FileTreeDict()
-                    #     print(d)
-
-                    # # Getting the key as a list.
-                    # paths = split_path_directories(path_diff(path, root))
-
-                    # # Current dictionary to update.
-                    # current_dict = self.file_tree
-
-                    # # Get current key to update.
-                    # for p in paths:
-                    #     current_dict = current_dict[p]
-
-                    # current_dict.update(current)
+            for dir in extra_dirs:
+                self.process_normal_dir(generate_path([root, dir]))
 
     def check_config_file(self: "FileTree") -> bool:
         """Check whether kalam.toml exist in present directory or not."""
@@ -83,10 +116,10 @@ class FileTree:
             exit()
         return True
 
-    def get_dir_dict(self: "FileTree", key: str) -> FileTreeDict:
-        """Return the value/path of the dir."""
-        return self.file_tree[key]
-
-    def get_file_tree(self: "FileTree") -> FileTreeDict:
-        """Return the file tree dictionary."""
+    def get_tree(self: "FileTree") -> List[FileTreeDict]:
+        """Send the file tree."""
         return self.file_tree
+
+    def get_list(self: "FileTree") -> List[str]:
+        """Send the file list."""
+        return self.file_list

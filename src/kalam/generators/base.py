@@ -8,6 +8,7 @@ from click import BOOL, prompt, secho
 import toml
 
 
+import kalam.constants.default_dirs as default_dirs
 from kalam.utils.path import (
     create_file_current,
     generate_path,
@@ -37,10 +38,10 @@ class Generator:
 
         # Directory to create
         self.dir_to_create = [
-            "contents",
-            "contents_templates",
-            "data",
-            f"generators/{type}",
+            default_dirs.CONTENTS,
+            default_dirs.CONTENTS_TEMPLATES,
+            default_dirs.DATA,
+            f"{default_dirs.GENERATORS}/{type}",
         ]
 
         # Default configuration.

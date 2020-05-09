@@ -163,3 +163,24 @@ def test_path_diff() -> None:
 
     path_diff = path_util.path_diff(path2, path1)
     assert path_diff == "2/with/extra/dir"
+
+
+def test_dir_in_ignore_list() -> None:
+    """Test check_dir_in_ignore_list."""
+
+    path_list = [
+        "/user/ank/test/test1",
+        "/user/ank/website/dist",
+        "/user/ank/website/website2",
+    ]
+    path = "/user/ank/folder1"
+    path2 = "/user/ank/website/dist/static"
+    path3 = "/user/ank/website/dist/static/image"
+    path4 = "/user/ank/website/website3/"
+    path5 = "/user/ank/website/website3/cool-stuffs"
+
+    assert path_util.dir_in_ignore_list(path, path_list) is False
+    assert path_util.dir_in_ignore_list(path2, path_list) is True
+    assert path_util.dir_in_ignore_list(path3, path_list) is True
+    assert path_util.dir_in_ignore_list(path4, path_list) is False
+    assert path_util.dir_in_ignore_list(path5, path_list) is False

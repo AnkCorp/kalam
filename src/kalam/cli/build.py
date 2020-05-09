@@ -21,3 +21,11 @@ def build() -> None:
 
     p = Packer()
     p.pack()
+    for pack in p.file_packs:
+        print(f"\n\nidentifiers: {pack.identifiers}\nurl: {pack.url}\nid: {pack.id}")
+        print("\nFiles:")
+        for file in pack.units:
+            print(file.filename())
+        print("\nAssets")
+        for file in pack.assets:
+            print(file.filename())
