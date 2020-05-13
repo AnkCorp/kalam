@@ -45,8 +45,8 @@ class FileTree:
                 file_list.append(generate_path([root, file]))
         return file_list
 
-    def process_content_type_dir(self: "FileTree", dir: str) -> None:
-        """Process content type dirs."""
+    def process_dir(self: "FileTree", dir: str, process_assets: bool = False) -> None:
+        """Process files in dir."""
         dir_to_ignore: List[str] = []
 
         for root, dirs, files in tree(dir):
@@ -57,7 +57,7 @@ class FileTree:
                     file_list = [generate_path([root, f]) for f in files]
                     self.file_list = self.file_list + file_list
 
-                    if bool(dirs):
+                    if bool(dirs) and process_assets:
                         dir_to_ignore = dir_to_ignore + [
                             generate_path([root, d]) for d in dirs
                         ]
@@ -76,35 +76,17 @@ class FileTree:
                         }
                     )
 
-    def process_normal_dir(self: "FileTree", dir: str) -> None:
-        """Process normal_dirs."""
-        for root, _, files in tree(dir):
-            if len(files) != 0:
-                files = [generate_path([root, file]) for file in files]
-                self.file_list = self.file_list + files
-                identifiers = split_path_directories(path_diff(pwd(), root))
-                self.file_tree.append(
-                    {
-                        "identifiers": identifiers,
-                        "url": generate_path(identifiers),
-                        "assets": [],
-                        "files": files,
-                    }
-                )
-
     def create_file_tree(self: "FileTree", extra_dirs: List[str]) -> None:
         """Create file tree."""
         root = pwd()
         if self.check_config_file():
-            self.process_content_type_dir(generate_path([root, default_dirs.CONTENTS]))
-            self.process_normal_dir(
-                generate_path([root, default_dirs.CONTENTS_TEMPLATES])
-            )
-            self.process_normal_dir(generate_path([root, default_dirs.DATA]))
-            self.process_normal_dir(generate_path([root, default_dirs.GENERATORS]))
+            self.process_dir(generate_path([root, default_dirs.CONTENTS]), True)
+            self.process_dir(generate_path([root, default_dirs.CONTENTS_TEMPLATES]))
+            self.process_dir(generate_path([root, default_dirs.DATA]))
+            self.process_dir(generate_path([root, default_dirs.GENERATORS]))
 
             for dir in extra_dirs:
-                self.process_normal_dir(generate_path([root, dir]))
+                self.process_dir(generate_path([root, dir]))
 
     def check_config_file(self: "FileTree") -> bool:
         """Check whether kalam.toml exist in present directory or not."""
